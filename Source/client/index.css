@@ -1,14 +1,14 @@
 .plotIconSvgPath {
-    fill: #424242 !important;
-    fill-rule: evenodd !important;
-    clip-rule: evenodd !important;
+	fill: #424242 !important;
+	fill-rule: evenodd !important;
+	clip-rule: evenodd !important;
 }
 .hidden {
-    display: none !important;
+	display: none !important;
 }
 .plotIcon {
-    cursor: pointer;
+	cursor: pointer;
 }
 .svgContainerStyle svg {
-    background-color: white;
+	background-color: white;
 }
