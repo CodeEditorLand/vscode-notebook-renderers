@@ -6,7 +6,8 @@
 #
 
 steps:
-    - template: initialization.yml
+  - template: initialization.yml
+
 #   - bash: npm run clean
 #     displayName: 'Clean'
 
