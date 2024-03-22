@@ -1,6 +1,45 @@
 {
-	"activationEvents": [],
+	"name": "jupyter-renderers",
+	"displayName": "Jupyter Notebook Renderers",
+	"version": "0.0.1",
+	"private": false,
+	"description": "Renderers for Jupyter Notebooks (with plotly, vega, gif, png, svg, jpeg and other such outputs)",
+	"homepage": "https://github.com/CodeEditorLand/Foundation#readme",
+	"bugs": {
+		"url": "https://github.com/CodeEditorLand/Foundation/issues"
+	},
+	"repository": {
+		"type": "git",
+		"url": "git+https://github.com/CodeEditorLand/Foundation.git"
+	},
+	"license": "SEE LICENSE IN LICENSE",
+	"qna": "https://stackoverflow.com/questions/tagged/visual-studio-code+jupyter",
+	"author": {
+		"name": "Playform",
+		"email": "Hello@Playform.Cloud",
+		"url": "https://playform.cloud"
+	},
+	"type": "module",
+	"main": "./out/extension_renderer/index.js",
 	"browser": "./out/extension_renderer/index.js",
+	"scripts": {
+		"build:client": "webpack --config=build/webpack/webpack.client.config.js --mode=production",
+		"build:extension": "webpack --config=build/webpack/webpack.extension.config.js --mode=production",
+		"compile": "npm run compile:extension && npm run compile:test && npm run compile:client",
+		"compile:client": "webpack --config=build/webpack/webpack.client.config.js",
+		"compile:client:watch": "webpack --config=build/webpack/webpack.client.config.js --watch",
+		"compile:extension": "tsc -p src/extension",
+		"compile:extension:watch": "tsc -p src/extension --watch",
+		"compile:test": "tsc -p src/test",
+		"compile:test:watch": "tsc -p src/test --watch",
+		"compile:webpack": "npm run build:client && npm run build:extension",
+		"dev": "concurrently -r npm:compile:extension:watch npm:compile:client:watch npm:compile:test:watch",
+		"postinstall": "node ./build/postInstall.js",
+		"package": "vsce package -o ms-notebook-renderers.vsix",
+		"prepublishOnly": "TypeScriptESBuild 'Source/**/*.ts'",
+		"vscode:prepublish": "npm run compile:webpack",
+		"watch": "tsc -watch -p ./"
+	},
 	"contributes": {
 		"notebookPreload": [
 			{
@@ -84,6 +123,7 @@
 			}
 		]
 	},
+	"activationEvents": [],
 	"dependencies": {
 		"@babel/helper-validator-identifier": "^7.22.20",
 		"@blueprintjs/core": "^3.7.0",
@@ -128,7 +168,6 @@
 		"vega-lite": "^5.6.1",
 		"yallist": "^4.0.0"
 	},
-	"description": "Renderers for Jupyter Notebooks (with plotly, vega, gif, png, svg, jpeg and other such outputs)",
 	"devDependencies": {
 		"@types/copy-webpack-plugin": "^10.1.0",
 		"@types/glob": "^7.1.1",
@@ -164,17 +203,17 @@
 		"webpack-cli": "^5.0.1",
 		"webpack-fix-default-import-plugin": "^1.0.3"
 	},
-	"displayName": "Jupyter Notebook Renderers",
-	"enabledApiProposals": [
-		"contribNotebookStaticPreloads"
-	],
+	"publishConfig": {
+		"access": "public"
+	},
+	"icon": "icon.png",
 	"galleryBanner": {
 		"color": "#ffffff",
 		"theme": "light"
 	},
-	"icon": "icon.png",
-	"main": "./out/extension_renderer/index.js",
-	"name": "jupyter-renderers",
+	"enabledApiProposals": [
+		"contribNotebookStaticPreloads"
+	],
 	"overrides": {
 		"ini": "1.3.6",
 		"jquery-ui@<1.13.2": "1.13.2",
@@ -186,25 +225,5 @@
 		"terser@<5.14.2": "5.14.2",
 		"ua-parser-js": "0.7.24",
 		"url-parse@<1.5.9": "1.5.9"
-	},
-	"qna": "https://stackoverflow.com/questions/tagged/visual-studio-code+jupyter",
-	"scripts": {
-		"build:client": "webpack --config=build/webpack/webpack.client.config.js --mode=production",
-		"build:extension": "webpack --config=build/webpack/webpack.extension.config.js --mode=production",
-		"compile": "npm run compile:extension && npm run compile:test && npm run compile:client",
-		"compile:client": "webpack --config=build/webpack/webpack.client.config.js",
-		"compile:client:watch": "webpack --config=build/webpack/webpack.client.config.js --watch",
-		"compile:extension": "tsc -p src/extension",
-		"compile:extension:watch": "tsc -p src/extension --watch",
-		"compile:test": "tsc -p src/test",
-		"compile:test:watch": "tsc -p src/test --watch",
-		"compile:webpack": "npm run build:client && npm run build:extension",
-		"dev": "concurrently -r npm:compile:extension:watch npm:compile:client:watch npm:compile:test:watch",
-		"package": "vsce package -o ms-notebook-renderers.vsix",
-		"postinstall": "node ./build/postInstall.js",
-		"prepublishOnly": "TypeScriptESBuild 'Source/**/*.ts'",
-		"vscode:prepublish": "npm run compile:webpack",
-		"watch": "tsc -watch -p ./"
-	},
-	"type": "module"
+	}
 }
