@@ -7,5 +7,5 @@
  * As part of webpack build, the contents of jQuery and require.js are injected into this file.
  */
 export async function activate() {
-	//
+    //
 }

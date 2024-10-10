@@ -1,5 +1,3 @@
-import type { OutputItem, RendererContext } from "vscode-notebook-renderer";
-
 // Copyright (c) Microsoft Corporation. All rights reserved.
 // Licensed under the MIT License.
 
@@ -8,62 +6,54 @@ import type { OutputItem, RendererContext } from "vscode-notebook-renderer";
 declare let __webpack_public_path__: string;
 declare const scriptUrl: string;
 const getPublicPath = () => {
-	return new URL(scriptUrl.replace(/[^/]+$/, "")).toString();
+    return new URL(scriptUrl.replace(/[^/]+$/, '')).toString();
 };
 
 // eslint-disable-next-line prefer-const, no-unused-vars, @typescript-eslint/no-unused-vars
 __webpack_public_path__ = getPublicPath();
 
-if (!("$" in globalThis) && !("jQuery" in globalThis)) {
-	// Required by JS code.
-	// eslint-disable-next-line @typescript-eslint/no-var-requires
-	const jQuery = require("jquery");
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any
-	(globalThis as any).$ = jQuery;
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any
-	(globalThis as any).jQuery = jQuery;
+import type { OutputItem, RendererContext } from 'vscode-notebook-renderer';
+if (!('$' in globalThis) && !('jQuery' in globalThis)) {
+    // Required by JS code.
+    // eslint-disable-next-line @typescript-eslint/no-var-requires
+    const jQuery = require('jquery');
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    (globalThis as any).$ = jQuery;
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    (globalThis as any).jQuery = jQuery;
 }
 export async function activate(ctx: RendererContext<void>) {
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any
-	const builtinRenderer = await ctx.getRenderer("vscode.builtin-renderer");
-	if (!builtinRenderer) {
-		throw new Error("Could not find the built-in js renderer");
-	}
-	try {
-		// eslint-disable-next-line @typescript-eslint/no-explicit-any
-		(builtinRenderer.experimental_registerHtmlRenderingHook as any)({
-			async postRender(
-				_outputItem: OutputItem,
-				element: HTMLElement,
-				_signal: AbortSignal,
-			): Promise<undefined> {
-				// Output container is expected to have the class `output_html`
-				element.classList.add("output_html");
-				return;
-			},
-		});
-		// eslint-disable-next-line @typescript-eslint/no-explicit-any
-		(builtinRenderer.experimental_registerJavaScriptRenderingHook as any)({
-			async preEvaluate(
-				outputItem: OutputItem,
-				element: HTMLElement,
-				script: string,
-				_signal: AbortSignal,
-			): Promise<string | undefined> {
-				if (ctx.postMessage) {
-					ctx.postMessage({
-						type: "from Renderer",
-						payload: "Hello World",
-					});
-				}
-				const metadata =
-					outputItem.metadata &&
-					typeof outputItem.metadata === "object" &&
-					"metadata" in outputItem.metadata
-						? // eslint-disable-next-line @typescript-eslint/no-explicit-any
-							(outputItem.metadata as any)["metadata"]
-						: undefined;
-				return `
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const builtinRenderer = await ctx.getRenderer('vscode.builtin-renderer');
+    if (!builtinRenderer) {
+        throw new Error('Could not find the built-in js renderer');
+    }
+    try {
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        (builtinRenderer.experimental_registerHtmlRenderingHook as any)({
+            async postRender(_outputItem: OutputItem, element: HTMLElement, _signal: AbortSignal): Promise<undefined> {
+                // Output container is expected to have the class `output_html`
+                element.classList.add('output_html');
+                return;
+            }
+        });
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        (builtinRenderer.experimental_registerJavaScriptRenderingHook as any)({
+            async preEvaluate(
+                outputItem: OutputItem,
+                element: HTMLElement,
+                script: string,
+                _signal: AbortSignal
+            ): Promise<string | undefined> {
+                if (ctx.postMessage) {
+                    ctx.postMessage({ type: 'from Renderer', payload: 'Hello World' });
+                }
+                const metadata =
+                    outputItem.metadata && typeof outputItem.metadata === 'object' && 'metadata' in outputItem.metadata
+                        ? // eslint-disable-next-line @typescript-eslint/no-explicit-any
+                          (outputItem.metadata as any)['metadata']
+                        : undefined;
+                return `
                 (function(){
                     let gotToUserScript = false;
                     try {
@@ -90,9 +80,9 @@ export async function activate(ctx: RendererContext<void>) {
                         }
                     }
                 })();`;
-			},
-		});
-	} catch (ex) {
-		throw new Error(`Failed to register JavaScript rendering hook: ${ex}`);
-	}
+            }
+        });
+    } catch (ex) {
+        throw new Error(`Failed to register JavaScript rendering hook: ${ex}`);
+    }
 }
