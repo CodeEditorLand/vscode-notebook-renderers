@@ -1,70 +1,38 @@
 // Copyright (c) Microsoft Corporation.
 // Licensed under the MIT License.
-const path = require("path");
-const fs = require("fs");
+const path = require('path');
+const fs = require('fs');
 
 class PostBuildHookWebpackPlugin {
-	apply(compiler) {
-		compiler.hooks.assetEmitted.tap(
-			"MyExampleWebpackPlugin",
-			(compilation) => {
-				if (compilation === "preload.js") {
-					const file = path.join(
-						__dirname,
-						"..",
-						"..",
-						"out",
-						"client_renderer",
-						"preload.js",
-					);
-					if (!fs.existsSync(file)) {
-						throw new Error(
-							`PostBuildHookWebpackPlugin failed, file does not exist (${file})`,
-						);
-					}
-					const requireFile = path.join(
-						__dirname,
-						"..",
-						"..",
-						"node_modules",
-						"requirejs",
-						"require.js",
-					);
-					const jqueryFile = path.join(
-						__dirname,
-						"..",
-						"..",
-						"node_modules",
-						"jquery",
-						"dist",
-						"jquery.min.js",
-					);
-					let requireFileContents = fs
-						.readFileSync(requireFile)
-						.toString();
-					if (!requireFileContents.includes(undefDeclaration)) {
-						throw new Error("Unable to update require.js");
-					}
-					// Ensure jQuery, require and define are globally available.
-					const declarations = [
-						"globalThis.$ = $;",
-						"window.$ = $;",
-						"window.require=window.requirejs=requirejs; window.define=define;",
-					];
-					requireFileContents = `${requireFileContents
-						.replace(
-							invocationDeclaration,
-							fixedInvocationDeclaration,
-						)
-						.replace(undefDeclaration, fixedUndefDeclaration)}\n\n`;
-					const newContents = `${requireFileContents}\n\n\n${fs.readFileSync(jqueryFile).toString()}\n\n\n${fs
-						.readFileSync(file)
-						.toString()}\n\n\n${declarations.join("\n")}`;
-					fs.writeFileSync(file, newContents);
-				}
-			},
-		);
-	}
+    apply(compiler) {
+        compiler.hooks.assetEmitted.tap('MyExampleWebpackPlugin', (compilation) => {
+            if (compilation === 'preload.js') {
+                const file = path.join(__dirname, '..', '..', 'out', 'client_renderer', 'preload.js');
+                if (!fs.existsSync(file)) {
+                    throw new Error(`PostBuildHookWebpackPlugin failed, file does not exist (${file})`);
+                }
+                const requireFile = path.join(__dirname, '..', '..', 'node_modules', 'requirejs', 'require.js');
+                const jqueryFile = path.join(__dirname, '..', '..', 'node_modules', 'jquery', 'dist', 'jquery.min.js');
+                let requireFileContents = fs.readFileSync(requireFile).toString();
+                if (!requireFileContents.includes(undefDeclaration)) {
+                    throw new Error('Unable to update require.js');
+                }
+                // Ensure jQuery, require and define are globally available.
+                const declarations = [
+                    'globalThis.$ = $;',
+                    'window.$ = $;',
+                    'window.require=window.requirejs=requirejs; window.define=define;'
+                ];
+                requireFileContents = `${requireFileContents
+                    .replace(invocationDeclaration, fixedInvocationDeclaration)
+                    .replace(undefDeclaration, fixedUndefDeclaration)}\n\n`;
+                const newContents = `${requireFileContents}\n\n\n${fs.readFileSync(jqueryFile).toString()}\n\n\n${fs
+                    .readFileSync(file)
+                    .toString()}\n\n\n${declarations.join('\n')}`;
+                fs.writeFileSync(file, newContents);
+            }
+        });
+    }
 }
 
 const invocationDeclaration = `}(this, (typeof setTimeout === 'undefined' ? undefined : setTimeout)));`;
