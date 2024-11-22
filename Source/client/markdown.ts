@@ -41,8 +41,10 @@ const styleContent = `
 export async function activate() {
 	const style = document.createElement("style");
 	style.textContent = styleContent;
+
 	const template = document.createElement("template");
 	template.classList.add("markdown-style");
 	template.content.appendChild(style);
+
 	document.head.appendChild(template);
 }

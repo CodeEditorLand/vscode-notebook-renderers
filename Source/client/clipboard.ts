@@ -12,6 +12,7 @@ declare interface ClipboardItem {
 
 export async function writeImageToClipboard(blob: Blob) {
 	const item = new ClipboardItem({ "image/png": blob });
+
 	if (!("write" in navigator.clipboard)) {
 		throw new Error("navigator.clipboard.write not supported");
 	}

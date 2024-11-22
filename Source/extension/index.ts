@@ -26,6 +26,7 @@ export async function activate(context: ExtensionContext): Promise<{
 		editor: NotebookEditor;
 		message: OpenImageInPlotViewer | SaveImageAs;
 	}>();
+
 	const messaging = notebooks.createRendererMessaging(
 		"jupyter-notebook-renderer",
 	);
@@ -35,6 +36,7 @@ export async function activate(context: ExtensionContext): Promise<{
 				| OpenImageInPlotViewer
 				| SaveImageAs
 				| IsJupyterExtensionInstalled;
+
 			if (!msg.type) {
 				return;
 			}
@@ -54,6 +56,7 @@ export async function activate(context: ExtensionContext): Promise<{
 						},
 						(ex) => console.error("Failed to send", ex),
 					);
+
 				return;
 			}
 			onDidReceiveMessage.fire({ editor, message: msg });

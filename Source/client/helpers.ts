@@ -10,8 +10,10 @@ export function concatMultilineString(
 	const nonLineFeedWhiteSpaceTrim = /(^[\t\f\v\r ]+|[\t\f\v\r ]+$)/g; // Local var so don't have to reset the lastIndex.
 	if (Array.isArray(str)) {
 		let result = "";
+
 		for (let i = 0; i < str.length; i += 1) {
 			const s = str[i];
+
 			if (i < str.length - 1 && !s.endsWith("\n")) {
 				result = result.concat(`${s}\n`);
 			} else {

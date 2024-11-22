@@ -7,6 +7,7 @@ import type { OutputItem, RendererContext } from "vscode-notebook-renderer";
 // eslint-disable-next-line no-unused-vars
 declare let __webpack_public_path__: string;
 declare const scriptUrl: string;
+
 const getPublicPath = () => {
 	return new URL(scriptUrl.replace(/[^/]+$/, "")).toString();
 };
@@ -26,6 +27,7 @@ if (!("$" in globalThis) && !("jQuery" in globalThis)) {
 export async function activate(ctx: RendererContext<void>) {
 	// eslint-disable-next-line @typescript-eslint/no-explicit-any
 	const builtinRenderer = await ctx.getRenderer("vscode.builtin-renderer");
+
 	if (!builtinRenderer) {
 		throw new Error("Could not find the built-in js renderer");
 	}
@@ -39,6 +41,7 @@ export async function activate(ctx: RendererContext<void>) {
 			): Promise<undefined> {
 				// Output container is expected to have the class `output_html`
 				element.classList.add("output_html");
+
 				return;
 			},
 		});
@@ -63,9 +66,11 @@ export async function activate(ctx: RendererContext<void>) {
 						? // eslint-disable-next-line @typescript-eslint/no-explicit-any
 							(outputItem.metadata as any)["metadata"]
 						: undefined;
+
 				return `
                 (function(){
                     let gotToUserScript = false;
+
                     try {
                         // Required by JS code in Jupyter notebook renderers such as ipyvega.
                         // We're not fully supporting ipyvega yet, but this ensures the scripts will not fall over and will work with minimal effort on our part.
@@ -82,6 +87,7 @@ export async function activate(ctx: RendererContext<void>) {
                         }).call(context, ele);
                     } catch (ex) {
                         console.error('VS Code Renderer failed to render output', ex);
+
                         if (gotToUserScript) {
                             throw ex;
                         } else {

@@ -15,6 +15,7 @@ import { isDarkTheme } from "./constants";
 // eslint-disable-next-line no-unused-vars
 declare let __webpack_public_path__: string;
 declare const scriptUrl: string;
+
 const getPublicPath = () => {
 	return new URL(scriptUrl.replace(/[^/]+$/, "")).toString();
 };
@@ -23,6 +24,7 @@ const getPublicPath = () => {
 __webpack_public_path__ = getPublicPath();
 
 const vegaViews = new Map<string, vegaEmbed.Result>();
+
 const VEGA_MIME_TYPE = "application/vnd.vega.v5+json";
 export const activate: ActivationFunction = (
 	_ctx: RendererContext<unknown>,
@@ -39,9 +41,12 @@ export const activate: ActivationFunction = (
 					? // eslint-disable-next-line @typescript-eslint/no-explicit-any
 						(outputItem.metadata as any)["metadata"]
 					: {};
+
 			const mode: vegaEmbed.Mode =
 				outputItem.mime === VEGA_MIME_TYPE ? "vega" : "vega-lite";
+
 			const spec: vegaEmbed.VisualizationSpec = outputItem.json();
+
 			if (spec === undefined) {
 				return;
 			}
@@ -49,6 +54,7 @@ export const activate: ActivationFunction = (
 				metadata && outputItem.mime in metadata
 					? metadata[outputItem.mime] || {}
 					: {};
+
 			const embedOptions: vegaEmbed.EmbedOptions =
 				typeof mimeMetadata === "object" && mimeMetadata
 					? mimeMetadata.embed_options || {}
@@ -61,12 +67,15 @@ export const activate: ActivationFunction = (
 			}
 			// Dispose of any existing view.
 			vegaViews.get(outputItem.id)?.finalize();
+
 			const loader = vegaEmbed.vega.loader({
 				http: { credentials: "same-origin" },
 			});
+
 			const sanitize = async (uri: string, options: unknown) => {
 				// Use the resolver for any URIs it wants to handle
 				const resolver = this._resolver;
+
 				if (resolver?.isLocal && resolver.isLocal(uri)) {
 					const absPath = await resolver.resolveUrl(uri);
 					uri = await resolver.getDownloadUrl(absPath);
@@ -77,6 +86,7 @@ export const activate: ActivationFunction = (
 			// Because `element` has a fixed width, and `ele` (newly created) does not.
 			const ele = document.createElement("div");
 			element.appendChild(ele);
+
 			const result = await vegaEmbed.default(ele, spec, {
 				actions: {
 					export: true,
