@@ -26,6 +26,7 @@ __webpack_public_path__ = getPublicPath();
 const vegaViews = new Map<string, vegaEmbed.Result>();
 
 const VEGA_MIME_TYPE = "application/vnd.vega.v5+json";
+
 export const activate: ActivationFunction = (
 	_ctx: RendererContext<unknown>,
 ) => {
