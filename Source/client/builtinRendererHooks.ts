@@ -31,6 +31,7 @@ export async function activate(ctx: RendererContext<void>) {
 	if (!builtinRenderer) {
 		throw new Error("Could not find the built-in js renderer");
 	}
+
 	try {
 		// eslint-disable-next-line @typescript-eslint/no-explicit-any
 		(builtinRenderer.experimental_registerHtmlRenderingHook as any)({
@@ -59,6 +60,7 @@ export async function activate(ctx: RendererContext<void>) {
 						payload: "Hello World",
 					});
 				}
+
 				const metadata =
 					outputItem.metadata &&
 					typeof outputItem.metadata === "object" &&

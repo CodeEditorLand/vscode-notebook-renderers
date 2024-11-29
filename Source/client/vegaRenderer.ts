@@ -51,6 +51,7 @@ export const activate: ActivationFunction = (
 			if (spec === undefined) {
 				return;
 			}
+
 			const mimeMetadata =
 				metadata && outputItem.mime in metadata
 					? metadata[outputItem.mime] || {}
@@ -79,13 +80,16 @@ export const activate: ActivationFunction = (
 
 				if (resolver?.isLocal && resolver.isLocal(uri)) {
 					const absPath = await resolver.resolveUrl(uri);
+
 					uri = await resolver.getDownloadUrl(absPath);
 				}
+
 				return loader.sanitize(uri, options);
 			};
 			// Don't use `element`, else the menu options appear on the far right.
 			// Because `element` has a fixed width, and `ele` (newly created) does not.
 			const ele = document.createElement("div");
+
 			element.appendChild(ele);
 
 			const result = await vegaEmbed.default(ele, spec, {
@@ -100,6 +104,7 @@ export const activate: ActivationFunction = (
 				mode,
 				loader: { ...loader, sanitize },
 			});
+
 			vegaViews.set(outputItem.id, result);
 			// Store generated image in output, send this to the extension.
 			// Add png representation of vega chart to output

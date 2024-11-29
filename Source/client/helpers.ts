@@ -24,6 +24,7 @@ export function concatMultilineString(
 		// Just trim whitespace. Leave \n in place
 		return trim ? result.replace(nonLineFeedWhiteSpaceTrim, "") : result;
 	}
+
 	return trim
 		? str.toString().replace(nonLineFeedWhiteSpaceTrim, "")
 		: str.toString();
